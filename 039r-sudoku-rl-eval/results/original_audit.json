@@ -1,0 +1,16 @@
+{
+  "label": "Original data, secondary audit, not a rerun",
+  "n_per_arm": 16,
+  "puzzles": 5,
+  "base": 0.5,
+  "trained": 0.6875,
+  "difference": 0.1875,
+  "ci95": [
+    -0.125,
+    0.5
+  ],
+  "decision_ci975": [
+    -0.1875,
+    0.5625
+  ]
+}
