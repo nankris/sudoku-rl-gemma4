@@ -1,0 +1,28 @@
+[NbConvertApp] Converting notebook sudoku_grpo_039_e4b_l4.ipynb to notebook
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+[NbConvertApp] ERROR | unhandled iopub msg: colab_request
+/usr/local/lib/python3.13/dist-packages/huggingface_hub/constants.py:302: FutureWarning: The `HF_HUB_ENABLE_HF_TRANSFER` environment variable is deprecated as 'hf_transfer' is not used anymore. Please use `HF_XET_HIGH_PERFORMANCE` instead to enable high performance transfer with Xet. Visit https://huggingface.co/docs/huggingface_hub/package_reference/environment_variables#hfxethighperformance for more details.
+  warnings.warn(
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[NbConvertApp] Writing 197761 bytes to sudoku_grpo_039_e4b_l4_output.ipynb

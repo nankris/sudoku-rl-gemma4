@@ -1,0 +1,70 @@
+{
+ "Gemma 4 E2B": {
+  "gpu": "L4",
+  "grpo_steps": 19,
+  "train_minutes": 34.8,
+  "sec_per_step": 109.8,
+  "reward_first5_mean": 10.04,
+  "reward_last5_mean": 7.2,
+  "base": {
+   "tag": "base",
+   "n_samples": 16,
+   "n_puzzles": 5,
+   "valid_function_rate": 1.0,
+   "solve_rate": 0.0625,
+   "strategies_solving_all": 0.0625,
+   "mean_valid_moves_of_40": 24.625,
+   "mean_reward_strategy_succeeds": 6.3,
+   "mean_completion_tokens": 668.5,
+   "eval_seconds": 236.32802963256836,
+   "gen_seconds": 235.4004328250885
+  },
+  "trained": {
+   "tag": "trained",
+   "n_samples": 16,
+   "n_puzzles": 5,
+   "valid_function_rate": 0.9375,
+   "solve_rate": 0.0625,
+   "strategies_solving_all": 0.0,
+   "mean_valid_moves_of_40": 29.3875,
+   "mean_reward_strategy_succeeds": 7.2525,
+   "mean_completion_tokens": 985.0,
+   "eval_seconds": 303.4950850009918,
+   "gen_seconds": 302.5964238643646
+  }
+ },
+ "Gemma 4 E4B": {
+  "gpu": "L4",
+  "grpo_steps": 20,
+  "train_minutes": 51.3,
+  "sec_per_step": 153.8,
+  "reward_first5_mean": 20.52,
+  "reward_last5_mean": 15.74,
+  "base": {
+   "tag": "base",
+   "n_samples": 16,
+   "n_puzzles": 5,
+   "valid_function_rate": 1.0,
+   "solve_rate": 0.5,
+   "strategies_solving_all": 0.5,
+   "mean_valid_moves_of_40": 27.7875,
+   "mean_reward_strategy_succeeds": 16.557499999999997,
+   "mean_completion_tokens": 884.0,
+   "eval_seconds": 364.4531970024109,
+   "gen_seconds": 363.31297278404236
+  },
+  "trained": {
+   "tag": "trained",
+   "n_samples": 16,
+   "n_puzzles": 5,
+   "valid_function_rate": 1.0,
+   "solve_rate": 0.6875,
+   "strategies_solving_all": 0.6875,
+   "mean_valid_moves_of_40": 38.0,
+   "mean_reward_strategy_succeeds": 22.725,
+   "mean_completion_tokens": 921.5,
+   "eval_seconds": 354.6809911727905,
+   "gen_seconds": 353.3395092487335
+  }
+ }
+}

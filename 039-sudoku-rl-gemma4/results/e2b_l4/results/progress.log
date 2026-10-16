@@ -1,0 +1,34 @@
+[      0s] start
+[     59s] installed
+[    171s] model loaded
+[    329s] eval base: batch 0 done
+[    413s] eval base: batch 1 done
+[    414s] eval base: {"tag": "base", "n_samples": 16, "n_puzzles": 5, "valid_function_rate": 1.0, "solve_rate": 0.0625, "strategies_solving_all": 0.0625, "mean_valid_moves_of_40": 24.625, "mean_reward_strategy_succeeds": 6.3, "mean_completion_tokens": 668.5, "eval_seconds": 236.32802963256836, "gen_seconds": 235.4004328250885}
+[    414s] beta=0.001 mcl=1024
+[    414s] train start
+[    578s] step 1 reward=19.0 len=549.5
+[    659s] step 2 reward=8.800000190734863 len=477.0
+[    721s] step 3 reward=6.0 len=381.5
+[    780s] step 4 reward=8.0 len=335.5
+[    845s] step 5 reward=8.399999618530273 len=381.5
+[    942s] step 6 reward=8.800000190734863 len=570.5
+[   1059s] step 7 reward=4.0 len=728.5
+[   1220s] step 8 reward=8.800000190734863 len=727.5
+[   1316s] step 9 reward=8.600000381469727 len=580.5
+[   1394s] step 10 reward=8.800000190734863 len=445.5
+[   1538s] step 11 reward=19.700000762939453 len=746.5
+[   1674s] step 12 reward=6.5 len=800.5
+[   1808s] step 13 reward=32.0 len=682.0
+[   1927s] step 14 reward=32.0 len=692.0
+[   2034s] step 15 reward=6.0 len=618.5
+[   2151s] step 16 reward=5.5 len=651.5
+[   2265s] step 17 reward=9.199999809265137 len=711.5
+[   2372s] step 18 reward=9.199999809265137 len=611.0
+[   2500s] budget stop at step 19
+[   2500s] step 19 reward=6.100000381469727 len=756.5
+[   2500s] step 19 reward=None len=None
+[   2501s] train done 2087s
+[   2651s] eval trained: batch 0 done
+[   2808s] eval trained: batch 1 done
+[   2809s] eval trained: {"tag": "trained", "n_samples": 16, "n_puzzles": 5, "valid_function_rate": 0.9375, "solve_rate": 0.0625, "strategies_solving_all": 0.0, "mean_valid_moves_of_40": 29.3875, "mean_reward_strategy_succeeds": 7.2525, "mean_completion_tokens": 985.0, "eval_seconds": 303.4950850009918, "gen_seconds": 302.5964238643646}
+[   2809s] ALL DONE

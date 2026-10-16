@@ -1,0 +1,449 @@
+{
+ "summary": {
+  "tag": "base",
+  "n_samples": 16,
+  "n_puzzles": 5,
+  "valid_function_rate": 1.0,
+  "solve_rate": 0.5,
+  "strategies_solving_all": 0.5,
+  "mean_valid_moves_of_40": 27.7875,
+  "mean_reward_strategy_succeeds": 16.557499999999997,
+  "mean_completion_tokens": 884.0,
+  "eval_seconds": 364.4531970024109,
+  "gen_seconds": 363.31297278404236
+ },
+ "rows": [
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def find_empty_cell(current_board, initial_grid):\n        for r in range(9):\n            for c in range(9):\n                # Only consider cells that were initially empty\n                if initial_grid[r][c] == 0 and current_board[r][c] == 0:\n                    return r, c\n        return None, None\n\n    def is_safe(current_board, row, col, num):\n        # Check row\n        for c in range(9):\n            if current_board[row][c] == num:\n                return False\n\n        # Check column\n        for r in range(9):\n            if current_board[r][col] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = (row // 3) * 3\n        start_col = (col // 3) * 3\n        for r in range(start_row, start_row + 3):\n            for c in range(start_col, start_col + 3):\n                if current_board[r][c] == num:\n                    return False\n        return True\n\n    def get_possible_moves(current_board, initial_grid):\n        moves = []\n        for r in range(9):\n            for c in range(9):\n                if initial_grid[r][c] == 0 and current_board[r][c] == 0:\n                    possible_nums = []\n                    for num in range(1, 10):\n                        if is_safe(current_board, r, c, num):\n                            possible_nums.append(num)\n                    # Store (cell, sorted_list_of_possibilities)\n                    moves.append(((r, c), sorted(possible_nums)))\n        return moves\n\n    # --- Strategy Implementation ---\n    \n    # 1. Find the cell with the minimum number of possibilities (Minimum Remaining Values heuristic)\n    possible_moves = get_possible_moves(board, initial)\n    \n    if not possible_moves:\n        # Puzzle is solved or no moves possible under constraints\n        return None # Or raise an error, depending on expected behavior when solved\n    \n    best_cell = None\n    min_possibilities = 10 # Max possible is 9\n    \n    for (r, c), possibilities in possible_moves:\n        num_possibilities = len(possibilities)\n        \n        if num_possibilities < min_possibilities:\n            min_possibilities = num_possibilities\n            best_cell = (r, c, possibilities)\n\n    # 2. Apply Degree Heuristic (Tie-breaker): Choose the cell whose assignment impacts the most unassigned neighbors\n    # Since we are only returning one move, a simple heuristic is to pick the first best_cell found \n    # if we don't implement full degree tracking (which is complex without deep neighbor checking).\n    # For this implementation, we stick to MRV first.\n    \n    if best_cell is None:\n        # Should not happen if possible_moves is not empty\n        return None\n\n    (row, col, possibilities) = best_cell\n    \n    # 3. Choose the value within the selected cell (Least Constraining Value heuristic, or just pick the smallest)\n    # We pick the smallest possible valid number (simplest LCV approximation)\n    number = possibilities[0]\n    \n    return (row, col, number)\n```",
+   "n_tokens": 876,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    40,
+    40,
+    40,
+    40,
+    40
+   ],
+   "solved": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "reward": [
+    30.0,
+    30.0,
+    30.0,
+    30.0,
+    30.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def is_safe(r, c, n):\n        # Check row\n        for col in range(9):\n            if board[r][col] == n:\n                return False\n        # Check column\n        for row in range(9):\n            if board[row][c] == n:\n                return False\n        # Check 3x3 box\n        start_row = r - r % 3\n        start_col = c - c % 3\n        for i in range(3):\n            for j in range(3):\n                if board[i + start_row][j + start_col] == n:\n                    return False\n        return True\n\n    def find_empty_cell():\n        for r in range(9):\n            for c in range(9):\n                # Only consider cells that were initially empty AND are currently empty\n                if initial[r][c] == 0 and board[r][c] == 0:\n                    return r, c\n        return None, None\n\n    def get_possible_moves(r, c):\n        possible = []\n        for num in range(1, 10):\n            if is_safe(r, c, num):\n                possible.append(num)\n        return possible\n\n    # Strategy 1: Find the cell with the minimum number of possibilities (MRV heuristic)\n    best_cell = None\n    min_possibilities = 10  # Max possible is 9\n    \n    candidates = []\n\n    # Identify all valid empty cells (must meet the initial condition)\n    for r in range(9):\n        for c in range(9):\n            if initial[r][c] == 0 and board[r][c] == 0:\n                candidates.append((r, c))\n\n    if not candidates:\n        # If no empty cells meeting the criteria, the puzzle might be solved or stuck\n        return None \n\n    for r, c in candidates:\n        possibilities = get_possible_moves(r, c)\n        num_possibilities = len(possibilities)\n        \n        if num_possibilities < min_possibilities:\n            min_possibilities = num_possibilities\n            best_cell = (r, c)\n        elif num_possibilities == min_possibilities and best_cell is None:\n            # Just pick the first one if all have the same minimum possibilities (shouldn't happen if initialized correctly)\n            best_cell = (r, c)\n\n    if best_cell:\n        r, c = best_cell\n        \n        # Strategy 2: Choose the smallest valid number from the cell with MRV\n        possibilities = get_possible_moves(r, c)\n        if possibilities:\n            return (r, c, min(possibilities))\n        else:\n            # This indicates an impossible puzzle state based on current board/initial\n            return None\n\n    return None # Should not be reached if candidates list was populated\n```",
+   "n_tokens": 876,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    40,
+    40,
+    40,
+    40,
+    40
+   ],
+   "solved": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "reward": [
+    30.0,
+    30.0,
+    30.0,
+    30.0,
+    30.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def find_empty_cell(board, initial):\n        for r in range(9):\n            for c in range(9):\n                if initial[r][c] == 0 and board[r][c] == 0:\n                    return r, c\n        return -1, -1\n\n    def is_safe(board, row, col, num):\n        # Check row\n        for c in range(9):\n            if board[row][c] == num:\n                return False\n\n        # Check column\n        for r in range(9):\n            if board[r][col] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = row - row % 3\n        start_col = col - col % 3\n        for i in range(3):\n            for j in range(3):\n                if board[i + start_row][j + start_col] == num:\n                    return False\n        return True\n\n    def find_best_move():\n        best_cell = None\n        best_candidates = {} # (r, c): list of valid numbers\n\n        # Iterate over all empty cells (that were initially empty)\n        for r in range(9):\n            for c in range(9):\n                if initial[r][c] == 0 and board[r][c] == 0:\n                    candidates = []\n                    for num in range(1, 10):\n                        if is_safe(board, r, c, num):\n                            candidates.append(num)\n                    \n                    best_candidates[(r, c)] = candidates\n\n        if not best_candidates:\n            return None # Board is full\n\n        # Simple Minimum Remaining Values (MRV) heuristic: pick the cell with the fewest candidates\n        min_candidates = 10\n        best_cell_coords = None\n        \n        for cell, candidates in best_candidates.items():\n            count = len(candidates)\n            if count < min_candidates:\n                min_candidates = count\n                best_cell_coords = cell\n            # Tie-breaker: choose the first one found (or use heuristic like degree, but keeping it simple)\n\n        if best_cell_coords is None:\n            return None\n\n        r, c = best_cell_coords\n        \n        # Among cells with minimum candidates, choose one that is the most constrained (least flexible)\n        # If there's only one candidate, that's the definitive move (Naked Single)\n        \n        candidates = best_candidates[(r, c)]\n        \n        if len(candidates) == 1:\n            return (r, c, candidates[0])\n        \n        # If multiple candidates exist for the MRV cell, choose the smallest valid number (simple deterministic choice)\n        return (r, c, min(candidates))\n\n    move = find_best_move()\n    \n    if move:\n        return move\n    else:\n        # If the board is full or no valid moves can be determined based on current logic, return None or raise error\n        # Since the prompt expects a tuple, we return an arbitrary invalid one if stuck, but ideally, this means the puzzle is solved or invalid.\n        return (-1, -1, -1) # Indicates no next move found\n```",
+   "n_tokens": 876,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    40,
+    40,
+    40,
+    40,
+    40
+   ],
+   "solved": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "reward": [
+    30.0,
+    30.0,
+    30.0,
+    30.0,
+    30.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def is_safe(b, r, c, n):\n        # Check row\n        for col in range(9):\n            if b[r][col] == n and col != c:\n                return False\n\n        # Check column\n        for row in range(9):\n            if b[row][c] == n and row != r:\n                return False\n\n        # Check 3x3 box\n        start_row = r - r % 3\n        start_col = c - c % 3\n        for i in range(3):\n            for j in range(3):\n                if b[start_row + i][start_col + j] == n and (start_row + i != r or start_col + j != c):\n                    return False\n        return True\n\n    def find_empty_eligible_cell(b, i):\n        # Iterates through cells that are empty in board AND were empty in initial\n        for r in range(9):\n            for c in range(9):\n                if initial[r][c] == 0 and b[r][c] == 0:\n                    return r, c\n        return None, None\n\n    def get_possible_moves(b, r, c):\n        possible_numbers = []\n        for n in range(1, 10):\n            if is_safe(b, r, c, n):\n                possible_numbers.append(n)\n        return possible_numbers\n\n    # Strategy: Find the cell with the minimum number of possible candidates (Minimum Remaining Values heuristic)\n    # If ties, pick the one that is first encountered (simple tie-breaker)\n\n    best_cell = None\n    min_candidates = 10 # Max possible candidates is 9\n    \n    r_empty, c_empty = find_empty_eligible_cell(board, initial)\n    \n    if r_empty is None:\n        # Should not happen if the puzzle isn't solved, but safety return\n        return None, None, None\n\n    # Simple implementation focuses on the first empty eligible cell found\n    # For a true MRV, we'd iterate over ALL empty eligible cells first.\n    \n    all_eligible_cells = []\n    for r in range(9):\n        for c in range(9):\n            if initial[r][c] == 0 and board[r][c] == 0:\n                all_eligible_cells.append((r, c))\n    \n    best_move = None\n    min_candidates = 10\n\n    for r, c in all_eligible_cells:\n        candidates = get_possible_moves(board, r, c)\n        num_candidates = len(candidates)\n\n        if num_candidates == 0:\n            # This indicates an impossible state, but following the prompt, we assume solvable.\n            # If we hit this, we might break or handle error.\n            pass \n        \n        if num_candidates < min_candidates:\n            min_candidates = num_candidates\n            best_cell = (r, c)\n\n    if best_cell:\n        r_best, c_best = best_cell\n        \n        # If only one move is possible, take it (Most Constrained Variable refinement)\n        candidates = get_possible_moves(board, r_best, c_best)\n        \n        if len(candidates) == 1:\n            return (r_best, c_best, candidates[0])\n        elif len(candidates) > 0:\n            # If multiple moves are possible, pick the smallest one (simplest tie-breaker)\n            return (r_best, c_best, min(candidates))\n        else:\n            # Should not happen for a solvable puzzle\n            return None, None, None\n\n    return None, None, None\n```",
+   "n_tokens": 876,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    40,
+    40,
+    40,
+    40,
+    40
+   ],
+   "solved": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "reward": [
+    30.0,
+    30.0,
+    30.0,
+    30.0,
+    30.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def find_empty_cell(board, initial):\n        for r in range(9):\n            for c in range(9):\n                # Only consider cells that were initially empty and are currently empty\n                if initial[r][c] == 0 and board[r][c] == 0:\n                    return r, c\n        return -1, -1\n\n    def is_safe(board, row, col, num):\n        # Check row\n        for c in range(9):\n            if board[row][c] == num:\n                return False\n\n        # Check column\n        for r in range(9):\n            if board[r][col] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = row - row % 3\n        start_col = col - col % 3\n        for i in range(3):\n            for j in range(3):\n                if board[i + start_row][j + start_col] == num:\n                    return False\n        return True\n\n    def get_possible_numbers(board, initial, row, col):\n        possible = []\n        for num in range(1, 10):\n            if is_safe(board, row, col, num):\n                possible.append(num)\n        return possible\n\n    # 1. Find the next empty cell to work on (simple strategy: first empty cell)\n    row, col = find_empty_cell(board, initial)\n\n    if row == -1:\n        # No empty cells left, though this function implies making a move\n        return (-1, -1, -1)\n\n    # 2. Candidate Generation (Minimum Remaining Values heuristic for best choice)\n    possible_numbers = get_possible_numbers(board, initial, row, col)\n\n    if not possible_numbers:\n        # This cell is blocked, indicating an invalid state if this happens in a solvable puzzle\n        return (-1, -1, -1)\n\n    # 3. Simple Choice Strategy: Choose the number that leads to the most constrained next state,\n    # or for simplicity here, just pick the smallest valid number (Least Constraining Value or MRV is too complex for built-ins)\n    # We will implement a basic backtracking check (look ahead) to select the best move among candidates.\n\n    best_move = None\n    best_score = -1\n\n    for num in possible_numbers:\n        # Simulate placing the number\n        temp_board = [row[:] for row in board]\n        temp_board[row][col] = num\n\n        # Check how many options are left in the *next* available empty cell after placing 'num'\n        next_r, next_c = find_empty_cell(temp_board, initial)\n\n        if next_r != -1:\n            # Calculate the number of possibilities for this next cell\n            next_candidates = get_possible_numbers(temp_board, initial, next_r, next_c)\n            score = len(next_candidates)\n        else:\n            # If this move fills the board, it's highly preferred (score is maximum possible)\n            score = 100 \n        \n        # We prefer the move that leaves the fewest options for the next cell (MRV principle)\n        if score > best_score:\n            best_score = score\n            best_move = (row, col, num)\n        elif score == best_score:\n            # Tie-breaker: prefer the smaller number\n            if best_move is None or num < best_move[2]:\n                best_move = (row, col, num)\n\n    if best_move:\n        return best_move\n    \n    # Fallback: return the smallest possible number if lookahead fails or is unnecessary\n    return (row, col, possible_numbers[0])\n```",
+   "n_tokens": 876,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    13,
+    18,
+    17,
+    3,
+    21
+   ],
+   "solved": [
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   "reward": [
+    2.6,
+    3.6,
+    3.4000000000000004,
+    0.6000000000000001,
+    4.2
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def find_empty_and_fillable():\n        for r in range(9):\n            for c in range(9):\n                # Condition: Empty in initial AND empty in board\n                if initial[r][c] == 0 and board[r][c] == 0:\n                    return r, c\n        return -1, -1\n\n    def is_safe(board, row, col, num):\n        # Check row\n        for c in range(9):\n            if board[row][c] == num:\n                return False\n\n        # Check column\n        for r in range(9):\n            if board[r][col] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = row - row % 3\n        start_col = col - col % 3\n        for i in range(3):\n            for j in range(3):\n                if board[i + start_row][j + start_col] == num:\n                    return False\n        return True\n\n    r_empty, c_empty = find_empty_and_fillable()\n\n    if r_empty == -1:\n        # Should not happen if puzzle is solvable and not fully filled\n        return (-1, -1, -1)\n\n    # Try numbers 1 through 9 in order\n    for num in range(1, 10):\n        if is_safe(board, r_empty, c_empty, num):\n            # We found the next move based on simple iteration (Minimum Remaining Values heuristic would be better, but this satisfies the prompt constraints)\n            return (r_empty, c_empty, num)\n\n    # Fallback if no number can be placed (shouldn't happen if the puzzle is valid and has a solution)\n    return (r_empty, c_empty, -1)\n```",
+   "n_tokens": 876,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    13,
+    1,
+    17,
+    2,
+    10
+   ],
+   "solved": [
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   "reward": [
+    2.6,
+    0.2,
+    3.4000000000000004,
+    0.4,
+    2.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def find_empty_cell(current_board, initial_board):\n        for r in range(9):\n            for c in range(9):\n                if initial_board[r][c] == 0 and current_board[r][c] == 0:\n                    return r, c\n        return -1, -1\n\n    def is_safe(current_board, r, c, num):\n        # Check row\n        for col in range(9):\n            if current_board[r][col] == num:\n                return False\n\n        # Check column\n        for row in range(9):\n            if current_board[row][c] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = (r // 3) * 3\n        start_col = (c // 3) * 3\n        for row in range(start_row, start_row + 3):\n            for col in range(start_col, start_col + 3):\n                if current_board[row][col] == num:\n                    return False\n        return True\n\n    def find_possible_move(current_board, initial_board):\n        for r in range(9):\n            for c in range(9):\n                if initial_board[r][c] == 0 and current_board[r][c] == 0:\n                    \n                    # Try numbers 1 through 9\n                    for num in range(1, 10):\n                        if is_safe(current_board, r, c, num):\n                            # Heuristic: Find the smallest possible valid number for this cell (Minimum Remaining Values idea simplified)\n                            # In a typical solver, we'd check candidates for all empty cells. \n                            # Here, we prioritize the first cell we find that has *any* possible move, and pick the smallest valid number for it.\n                            return r, c, num\n        \n        # If no solvable move is found (shouldn't happen if the puzzle is valid and solvable)\n        return (-1, -1, -1)\n\n    return find_possible_move(board, initial)\n```",
+   "n_tokens": 876,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    37,
+    33,
+    34,
+    31,
+    33
+   ],
+   "solved": [
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   "reward": [
+    7.4,
+    6.6000000000000005,
+    6.800000000000001,
+    6.2,
+    6.6000000000000005
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def find_empty_cell(current_board):\n        for r in range(9):\n            for c in range(9):\n                if current_board[r][c] == 0:\n                    return r, c\n        return -1, -1\n\n    def is_safe(current_board, r, c, num):\n        # Check row\n        for col in range(9):\n            if current_board[r][col] == num:\n                return False\n\n        # Check column\n        for row in range(9):\n            if current_board[row][c] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = (r // 3) * 3\n        start_col = (c // 3) * 3\n        for i in range(3):\n            for j in range(3):\n                if current_board[start_row + i][start_col + j] == num:\n                    return False\n        return True\n\n    # Find the next potential move based on the constraints\n    for r in range(9):\n        for c in range(9):\n            # Constraint: Must be empty in initial AND empty in current board\n            if initial[r][c] == 0 and board[r][c] == 0:\n                # Try numbers 1 through 9\n                for num in range(1, 10):\n                    if is_safe(board, r, c, num):\n                        # Return the first valid placement found (Simple Guessing/MRV proxy)\n                        return (r, c, num)\n\n    # If no move is found (should not happen in a solvable puzzle unless fully solved)\n    return (-1, -1, -1)\n```",
+   "n_tokens": 876,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    37,
+    33,
+    34,
+    31,
+    33
+   ],
+   "solved": [
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   "reward": [
+    7.4,
+    6.6000000000000005,
+    6.800000000000001,
+    6.2,
+    6.6000000000000005
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def is_safe(board, row, col, num):\n        # Check row\n        for x in range(9):\n            if board[row][x] == num:\n                return False\n\n        # Check column\n        for x in range(9):\n            if board[x][col] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = row - row % 3\n        start_col = col - col % 3\n        for i in range(3):\n            for j in range(3):\n                if board[i + start_row][j + start_col] == num:\n                    return False\n        return True\n\n    def find_empty_cell(board, initial):\n        for r in range(9):\n            for c in range(9):\n                # Must be empty on board AND allowed to be filled (was empty initially)\n                if board[r][c] == 0 and initial[r][c] == 0:\n                    return r, c\n        return None, None\n\n    # 1. Simple strategy: Find the first empty cell\n    row, col = find_empty_cell(board, initial)\n\n    if row is None:\n        # Board is full, theoretically this shouldn't happen if the puzzle is solvable\n        return (-1, -1, -1)\n\n    # 2. Try numbers 1 through 9\n    for num in range(1, 10):\n        if is_safe(board, row, col, num):\n            return (row, col, num)\n\n    # Should not be reached if the puzzle state is valid\n    return (-1, -1, -1)\n```",
+   "n_tokens": 892,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    13,
+    1,
+    17,
+    2,
+    10
+   ],
+   "solved": [
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   "reward": [
+    2.6,
+    0.2,
+    3.4000000000000004,
+    0.4,
+    2.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def find_empty_cell(current_board, starting_initial):\n        for r in range(9):\n            for c in range(9):\n                # Only consider cells that were empty initially AND are currently empty on the board\n                if starting_initial[r][c] == 0 and current_board[r][c] == 0:\n                    return r, c\n        return -1, -1\n\n    def is_safe(current_board, row, col, num):\n        # Check row\n        for c in range(9):\n            if current_board[row][c] == num:\n                return False\n\n        # Check column\n        for r in range(9):\n            if current_board[r][col] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = row - row % 3\n        start_col = col - col % 3\n        for i in range(3):\n            for j in range(3):\n                if current_board[i + start_row][j + start_col] == num:\n                    return False\n        return True\n\n    def find_next_move(current_board, starting_initial):\n        # 1. Find all possible empty cells (r, c) based on the initial constraints\n        possible_cells = []\n        for r in range(9):\n            for c in range(9):\n                if starting_initial[r][c] == 0 and current_board[r][c] == 0:\n                    possible_cells.append((r, c))\n\n        if not possible_cells:\n            # No more empty cells matching initial constraints\n            return None\n\n        # 2. Try to find a number (1-9) that is valid for each empty cell, prioritizing minimum value (simple heuristic)\n        best_move = None\n        \n        # Iterate through cells, prioritize cells that have fewer options (Minimum Remaining Values heuristic)\n        # Although we only need to return ONE move, iterating through all cells and finding the first solvable one\n        # based on a simple heuristic is robust.\n        \n        min_options_count = 10\n        best_candidates = []\n\n        for r, c in possible_cells:\n            options = []\n            for num in range(1, 10):\n                if is_safe(current_board, r, c, num):\n                    options.append(num)\n            \n            if len(options) < min_options_count:\n                min_options_count = len(options)\n                best_candidates = [(r, c, sorted(options)[0])] # Store the cell and its smallest valid option\n            elif len(options) == min_options_count:\n                best_candidates.append((r, c, sorted(options)[0]))\n\n        if not best_candidates:\n            # This should theoretically not happen if the puzzle is solvable, but if stuck, return the first available empty spot with smallest number\n            r, c = possible_cells[0]\n            for num in range(1, 10):\n                if is_safe(current_board, r, c, num):\n                    return (r, c, num)\n            return None # Should mean the puzzle is unsolvable from this state\n\n        # Select the best candidate based on the smallest minimum option found\n        best_candidates.sort(key=lambda x: x[2])\n        \n        # Return the move (row, col, number)\n        return best_candidates[0]\n\n    move = find_next_move(board, initial)\n    \n    if move is None:\n        # If no move can be made (puzzle solved or stuck), return a placeholder that might error gracefully upstream\n        # Since the prompt guarantees a return structure, we return (-1, -1, -1) if nothing is found.\n        return (-1, -1, -1)\n        \n    return move\n```",
+   "n_tokens": 892,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    40,
+    40,
+    40,
+    40,
+    40
+   ],
+   "solved": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "reward": [
+    30.0,
+    30.0,
+    30.0,
+    30.0,
+    30.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def find_empty_cells(board, initial):\n        empty_cells = []\n        for r in range(9):\n            for c in range(9):\n                if initial[r][c] == 0 and board[r][c] == 0:\n                    empty_cells.append((r, c))\n        return empty_cells\n\n    def is_safe(board, row, col, num):\n        # Check row\n        for c in range(9):\n            if board[row][c] == num:\n                return False\n        \n        # Check column\n        for r in range(9):\n            if board[r][col] == num:\n                return False\n        \n        # Check 3x3 box\n        start_row = row - row % 3\n        start_col = col - col % 3\n        for i in range(3):\n            for j in range(3):\n                if board[i + start_row][j + start_col] == num:\n                    return False\n        \n        return True\n\n    empty_cells = find_empty_cells(board, initial)\n\n    # Strategy: Try to place the number that has the fewest possibilities in the next empty cell.\n    # This is a simple heuristic, similar to Minimum Remaining Values (MRV) applied iteratively.\n\n    best_move = None\n    min_possibilities = 10 # Max possible is 9\n\n    for r, c in empty_cells:\n        possible_numbers = []\n        for num in range(1, 10):\n            if is_safe(board, r, c, num):\n                possible_numbers.append(num)\n        \n        num_possibilities = len(possible_numbers)\n\n        if num_possibilities < min_possibilities:\n            min_possibilities = num_possibilities\n            # In this simplified strategy, we just pick the first valid number found for the cell \n            # that has the minimum possibilities.\n            if possible_numbers:\n                best_move = (r, c, possible_numbers[0])\n        \n        # If we find a cell with only one possibility, we can immediately return it (most constrained variable)\n        if min_possibilities == 1 and best_move is not None:\n            return best_move\n\n    # If a best move was found during the iteration (even if not strictly MRV selection based on the first found), return it.\n    if best_move:\n        return best_move\n    \n    # Fallback: If no constraints allow us to determine a single clear move, \n    # just pick the first available empty cell and try to place the smallest valid number.\n    if empty_cells:\n        r, c = empty_cells[0]\n        for num in range(1, 10):\n            if is_safe(board, r, c, num):\n                return (r, c, num)\n                \n    # Should theoretically not happen if the board isn't fully solved\n    return None\n```",
+   "n_tokens": 892,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    40,
+    40,
+    40,
+    40,
+    40
+   ],
+   "solved": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "reward": [
+    30.0,
+    30.0,
+    30.0,
+    30.0,
+    30.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def is_safe(b, r, c, num):\n        # Check row\n        for col in range(9):\n            if b[r][col] == num:\n                return False\n        \n        # Check column\n        for row in range(9):\n            if b[row][c] == num:\n                return False\n        \n        # Check 3x3 box\n        start_row = r - r % 3\n        start_col = c - c % 3\n        for i in range(3):\n            for j in range(3):\n                if b[i + start_row][j + start_col] == num:\n                    return False\n        return True\n\n    # Find the next empty cell that was originally empty\n    def find_empty_cell(b, init):\n        for r in range(9):\n            for c in range(9):\n                # Only consider cells that were empty initially AND are currently empty\n                if init[r][c] == 0 and b[r][c] == 0:\n                    return r, c\n        return -1, -1\n\n    r, c = find_empty_cell(board, initial)\n    \n    if r == -1:\n        # No empty cells found according to criteria (should ideally not happen if puzzle is solvable)\n        # Return a placeholder or handle as an error state if needed, but for this requirement, \n        # we must return a tuple. Let's assume the caller handles a full board if this is reached unexpectedly.\n        return (-1, -1, -1)\n\n    # Try numbers 1 through 9 in order\n    for num in range(1, 10):\n        if is_safe(board, r, c, num):\n            # Found a valid move for this cell using simple constraint propagation (Minimum Remaining Values implicitly favors the first found)\n            return (r, c, num)\n    \n    # If no move is found for this cell, the puzzle might be invalid or require deeper recursion (which is beyond the scope of a single move finder)\n    return (r, c, -1) # Indicates no possible move found for this cell based on current state\n```",
+   "n_tokens": 892,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    13,
+    1,
+    17,
+    2,
+    10
+   ],
+   "solved": [
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   "reward": [
+    2.6,
+    0.2,
+    3.4000000000000004,
+    0.4,
+    2.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def is_safe(board, row, col, num):\n        # Check row\n        for d in range(9):\n            if board[row][d] == num:\n                return False\n\n        # Check column\n        for d in range(9):\n            if board[d][col] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = row - row % 3\n        start_col = col - col % 3\n        for i in range(3):\n            for j in range(3):\n                if board[i + start_row][j + start_col] == num:\n                    return False\n        return True\n\n    # Find the next empty cell that is also in the initial puzzle's empty set\n    empty_cells = []\n    for r in range(9):\n        for c in range(9):\n            if initial[r][c] == 0 and board[r][c] == 0:\n                empty_cells.append((r, c))\n\n    if not empty_cells:\n        return None # Should not happen if a solution is expected\n\n    # Simple Minimum Remaining Values (MRV) heuristic:\n    # Choose the empty cell with the fewest legal moves (i.e., the cell that is hardest to fill)\n    best_cell = None\n    min_moves = 10 # Max possible moves is 9\n    \n    for r, c in empty_cells:\n        possible_numbers = []\n        for num in range(1, 10):\n            if is_safe(board, r, c, num):\n                possible_numbers.append(num)\n        \n        num_moves = len(possible_numbers)\n        \n        # We prioritize the cell with the minimum number of options\n        if num_moves < min_moves:\n            min_moves = num_moves\n            best_cell = (r, c)\n\n    if best_cell is None:\n        # This means no moves are possible, or the puzzle is invalid/solved in an unexpected way\n        return None \n\n    r, c = best_cell\n\n    # Among the best cell (MRV), choose the move that leads to the most constrained next state \n    # (Least Constraining Value - LCV). Here, we just pick the smallest legal number (simplest heuristic fallback).\n    possible_numbers = []\n    for num in range(1, 10):\n        if is_safe(board, r, c, num):\n            possible_numbers.append(num)\n            \n    if not possible_numbers:\n        return None\n\n    # Return the first valid number found (simplest LCV implementation)\n    return (r, c, possible_numbers[0])\n```",
+   "n_tokens": 892,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    40,
+    40,
+    40,
+    40,
+    40
+   ],
+   "solved": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "reward": [
+    30.0,
+    30.0,
+    30.0,
+    30.0,
+    30.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def find_empty_cell(board, initial):\n        for r in range(9):\n            for c in range(9):\n                if initial[r][c] == 0 and board[r][c] == 0:\n                    return r, c\n        return -1, -1\n\n    def is_safe(board, r, c, num):\n        # Check row\n        for col in range(9):\n            if board[r][col] == num:\n                return False\n\n        # Check column\n        for row in range(9):\n            if board[row][c] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = (r // 3) * 3\n        start_col = (c // 3) * 3\n        for i in range(3):\n            for j in range(3):\n                if board[start_row + i][start_col + j] == num:\n                    return False\n        return True\n\n    def get_possible_moves(board, initial):\n        r_start, c_start = find_empty_cell(board, initial)\n        if r_start == -1:\n            return None # Board is full\n\n        row = r_start\n        col = c_start\n        \n        possible_numbers = []\n        for num in range(1, 10):\n            if is_safe(board, row, col, num):\n                possible_numbers.append(num)\n        \n        return row, col, possible_numbers\n\n    # Simple strategy: Pick the first empty cell and try to place the smallest valid number\n    move = get_possible_moves(board, initial)\n\n    if move is None:\n        # Should not happen if the puzzle is solvable and not yet complete, \n        # but return an invalid move signal if it is.\n        return (-1, -1, -1)\n    \n    row, col, possible_numbers = move\n\n    if possible_numbers:\n        # Greedy choice: select the smallest possible number\n        return (row, col, possible_numbers[0])\n    else:\n        # No moves possible in this cell (implies an error or contradiction if the puzzle is solvable)\n        return (row, col, -1)\n```",
+   "n_tokens": 892,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    13,
+    1,
+    17,
+    2,
+    10
+   ],
+   "solved": [
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   "reward": [
+    2.6,
+    0.2,
+    3.4000000000000004,
+    0.4,
+    2.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def find_empty_cell(current_board, original_puzzle):\n        for r in range(9):\n            for c in range(9):\n                if original_puzzle[r][c] == 0 and current_board[r][c] == 0:\n                    return r, c\n        return -1, -1\n\n    def is_safe(current_board, row, col, num):\n        # Check row\n        for c in range(9):\n            if current_board[row][c] == num:\n                return False\n\n        # Check column\n        for r in range(9):\n            if current_board[r][col] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = row - row % 3\n        start_col = col - col % 3\n        for i in range(3):\n            for j in range(3):\n                if current_board[start_row + i][start_col + j] == num:\n                    return False\n        return True\n\n    r, c = find_empty_cell(board, initial)\n\n    if r == -1:\n        return (-1, -1, -1) # Board is full\n\n    # Try numbers 1 through 9\n    for num in range(1, 10):\n        if is_safe(board, r, c, num):\n            # In a real solver, you might want to pick the 'best' move \n            # (e.g., one leading to a solution fastest, or a naked single).\n            # For this specific requirement (return *a* valid move), we return the first one found.\n            return (r, c, num)\n\n    # If no move is found (should only happen if the initial board is unsolvable)\n    return (-1, -1, -1)\n```",
+   "n_tokens": 892,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    13,
+    1,
+    17,
+    2,
+    10
+   ],
+   "solved": [
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   "reward": [
+    2.6,
+    0.2,
+    3.4000000000000004,
+    0.4,
+    2.0
+   ]
+  },
+  {
+   "completion": "```python\ndef strategy(board, initial):\n    def find_empty_cells():\n        empty = []\n        for r in range(9):\n            for c in range(9):\n                if initial[r][c] == 0 and board[r][c] == 0:\n                    empty.append((r, c))\n        return empty\n\n    def is_safe(board, row, col, num):\n        # Check row\n        for c in range(9):\n            if board[row][c] == num:\n                return False\n\n        # Check column\n        for r in range(9):\n            if board[r][col] == num:\n                return False\n\n        # Check 3x3 box\n        start_row = (row // 3) * 3\n        start_col = (col // 3) * 3\n        for r in range(start_row, start_row + 3):\n            for c in range(start_col, start_col + 3):\n                if board[r][c] == num:\n                    return False\n        return True\n\n    empty_cells = find_empty_cells()\n\n    # Try to find the best move (Minimum Remaining Values heuristic)\n    best_move = None\n    min_possible_values = 10  # More than 9\n\n    for r, c in empty_cells:\n        possible_values = []\n        for num in range(1, 10):\n            if is_safe(board, r, c, num):\n                possible_values.append(num)\n\n        num_possible = len(possible_values)\n\n        if num_possible == 0:\n            # This state is likely unsolvable, but for a heuristic, we skip it\n            continue\n\n        if num_possible < min_possible_values:\n            min_possible_values = num_possible\n            # For a consistent choice when MRV is tied, we choose the lexicographically smallest one\n            best_number = min(possible_values)\n            best_move = (r, c, best_number)\n\n    if best_move:\n        return best_move\n\n    # Fallback: If MRV didn't find a clear winner or no moves are possible based on the heuristic,\n    # just pick the first empty cell and the smallest valid number for deterministic output.\n    if empty_cells:\n        r, c = empty_cells[0]\n        for num in range(1, 10):\n            if is_safe(board, r, c, num):\n                return (r, c, num)\n\n    # Should not happen for a solvable puzzle state where moves are expected\n    return (-1, -1, -1)\n```",
+   "n_tokens": 892,
+   "function_found": true,
+   "valid_fn": true,
+   "moves": [
+    40,
+    40,
+    40,
+    40,
+    40
+   ],
+   "solved": [
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "reward": [
+    30.0,
+    30.0,
+    30.0,
+    30.0,
+    30.0
+   ]
+  }
+ ]
+}

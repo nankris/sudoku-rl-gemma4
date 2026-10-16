@@ -1,0 +1,29 @@
+{
+ "base": {
+  "tag": "base",
+  "n_samples": 16,
+  "n_puzzles": 5,
+  "valid_function_rate": 1.0,
+  "solve_rate": 0.5,
+  "strategies_solving_all": 0.5,
+  "mean_valid_moves_of_40": 27.7875,
+  "mean_reward_strategy_succeeds": 16.557499999999997,
+  "mean_completion_tokens": 884.0,
+  "eval_seconds": 364.4531970024109,
+  "gen_seconds": 363.31297278404236
+ },
+ "trained": {
+  "tag": "trained",
+  "n_samples": 16,
+  "n_puzzles": 5,
+  "valid_function_rate": 1.0,
+  "solve_rate": 0.6875,
+  "strategies_solving_all": 0.6875,
+  "mean_valid_moves_of_40": 38.0,
+  "mean_reward_strategy_succeeds": 22.725,
+  "mean_completion_tokens": 921.5,
+  "eval_seconds": 354.6809911727905,
+  "gen_seconds": 353.3395092487335
+ },
+ "total_seconds": 3955.3913447856903
+}

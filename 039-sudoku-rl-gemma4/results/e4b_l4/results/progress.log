@@ -1,0 +1,36 @@
+[      0s] start
+[      0s] start
+[     20s] installed
+[    149s] model loaded
+[    350s] eval base: batch 0 done
+[    519s] eval base: batch 1 done
+[    520s] eval base: {"tag": "base", "n_samples": 16, "n_puzzles": 5, "valid_function_rate": 1.0, "solve_rate": 0.5, "strategies_solving_all": 0.5, "mean_valid_moves_of_40": 27.7875, "mean_reward_strategy_succeeds": 16.557499999999997, "mean_completion_tokens": 884.0, "eval_seconds": 364.4531970024109, "gen_seconds": 363.31297278404236}
+[    520s] beta=0.001 mcl=1024
+[    520s] train start
+[    734s] step 1 reward=32.0 len=737.5
+[    890s] step 2 reward=32.0 len=684.5
+[   1029s] step 3 reward=32.0 len=652.5
+[   1178s] step 4 reward=3.4000000953674316 len=701.0
+[   1279s] step 5 reward=3.200000047683716 len=456.0
+[   1431s] step 6 reward=4.199999809265137 len=751.0
+[   1631s] step 7 reward=14.5 len=897.5
+[   1732s] step 8 reward=2.200000047683716 len=476.5
+[   1870s] step 9 reward=17.399999618530273 len=612.5
+[   2020s] step 10 reward=20.399999618530273 len=559.0
+[   2154s] step 11 reward=32.0 len=668.0
+[   2332s] step 12 reward=32.0 len=793.5
+[   2532s] step 13 reward=14.5 len=863.0
+[   2680s] step 14 reward=20.100000381469727 len=576.5
+[   2833s] step 15 reward=32.0 len=667.5
+[   3033s] step 16 reward=0.0 len=739.0
+[   3211s] step 17 reward=32.0 len=714.0
+[   3315s] step 18 reward=7.399999618530273 len=517.0
+[   3447s] step 19 reward=7.300000190734863 len=575.0
+[   3595s] budget stop at step 20
+[   3595s] step 20 reward=32.0 len=724.0
+[   3595s] step 20 reward=None len=None
+[   3596s] train done 3076s
+[   3764s] eval trained: batch 0 done
+[   3954s] eval trained: batch 1 done
+[   3955s] eval trained: {"tag": "trained", "n_samples": 16, "n_puzzles": 5, "valid_function_rate": 1.0, "solve_rate": 0.6875, "strategies_solving_all": 0.6875, "mean_valid_moves_of_40": 38.0, "mean_reward_strategy_succeeds": 22.725, "mean_completion_tokens": 921.5, "eval_seconds": 354.6809911727905, "gen_seconds": 353.3395092487335}
+[   3955s] ALL DONE

@@ -1,0 +1,8 @@
+{
+ "note": "T4 session tig039 (Gemma 4 E2B, 16-bit LoRA r=32, max_steps=100, 140-min training cap) was terminated server-side at 2026-10-14 21:13:41 UTC (colab log: EVENT session_terminated) while still training, before any results were downloaded. The values below were copied from progress polls during the run (colab exec reads of /content/results/progress.log and train_log.jsonl); the trained eval was never reached.",
+ "session": {"gpu": "T4", "start_utc": "2026-10-14 19:33:44", "terminated_utc": "2026-10-14 21:13:41", "minutes": 100.0},
+ "base_eval": {"tag": "base", "n_samples": 16, "n_puzzles": 5, "valid_function_rate": 1.0, "solve_rate": 0.0625, "strategies_solving_all": 0.0625, "mean_valid_moves_of_40": 27.75, "mean_reward_strategy_succeeds": 6.925, "mean_completion_tokens": 659.5, "eval_seconds": 278.06},
+ "train_reward_steps_1_21": [9.2, 8.8, 8.4, 8.0, 8.4, 20.4, 8.6, 9.0, 8.9, 8.8, 19.7, 4.6, 19.6, 32.0, 14.5, 32.0, -12.5, 3.1, 6.1, 20.6, 2.6],
+ "train_reward_steps_25_27": {"25": 2.7, "26": 19.7, "27": 14.5},
+ "seconds_per_step_T4": "about 140-150 (step 21 at 2966 s of training, step 27 at ~4000 s)"
+}
